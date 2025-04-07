@@ -3,14 +3,14 @@ package io.nology.postcode_backend.postcode;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
-@RequestMapping("postcode")
-public class PostcodeController {
+@RequestMapping("admin")
+public class AdminController {
     @GetMapping()
     public String getMethodName() {
-        return "Public route";
+        return "Admin only route";
     }
 
 }
