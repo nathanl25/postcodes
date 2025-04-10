@@ -16,7 +16,7 @@ public class Suburb extends BaseEntity {
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
     // private Long id;
 
-    @Column
+    @Column(nullable = false, name = "s_name")
     private String name;
 
     public Suburb() {

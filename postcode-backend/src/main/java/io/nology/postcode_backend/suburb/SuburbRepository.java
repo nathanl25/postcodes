@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SuburbRepository extends JpaRepository<Suburb, Long> {
 
     Optional<List<Suburb>> findByIdIn(Set<Long> suburbIds);
+
+    Optional<Suburb> findOneByName(String name);
 }

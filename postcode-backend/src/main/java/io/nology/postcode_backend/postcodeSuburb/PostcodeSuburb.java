@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 
 @Entity
@@ -25,10 +26,20 @@ public class PostcodeSuburb extends BaseEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "postcode")
-    Postcode postcode;
+    @JoinColumn(name = "postcode_id")
+    @OrderColumn(name = "p_name")
+    private Postcode postcode;
 
     @ManyToOne
     @JoinColumn(name = "suburb_id")
-    Suburb suburb;
+    @OrderColumn(name = "s_name")
+    private Suburb suburb;
+
+    public Postcode getPostcode() {
+        return postcode;
+    }
+
+    public Suburb getSuburb() {
+        return suburb;
+    }
 }

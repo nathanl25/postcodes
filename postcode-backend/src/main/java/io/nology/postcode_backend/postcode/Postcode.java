@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "postcodes")
 public class Postcode extends BaseEntity {
-    @Column(nullable = false)
+    @Column(nullable = false, name = "p_name")
     private String postcode;
 
     public Postcode() {
@@ -20,5 +20,9 @@ public class Postcode extends BaseEntity {
 
     public String getPostcode() {
         return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
     }
 }
