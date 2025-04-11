@@ -78,13 +78,17 @@ public class PostcodeService {
     }
 
     public PostcodeDTO updatePostcode(Postcode toUpdate, UpdatePostcodeDTO data) throws NotFoundException {
-        List<Suburb> suburbs = null;
-        if (data.hasSuburbIds()) {
-            suburbs = this.suburbService.getByIds(data.getSuburbIds());
-            this.postcodeSuburbService.setSuburbList(toUpdate, suburbs);
-        }
+        // List<Suburb> suburbs = null;
+        // if (data.hasSuburbIds()) {
+        List<Suburb> suburbs = this.suburbService.getByIds(data.getSuburbIds());
+        this.postcodeSuburbService.setSuburbList(toUpdate, suburbs);
+        // }
         mapper.map(data, toUpdate);
         this.repo.saveAndFlush(toUpdate);
+        // if (suburbs == null) {
+        // suburbs = this.postcodeSuburbService.getSuburbList(toUpdate);
+        // }
+        suburbs = suburbs != null ? suburbs : this.postcodeSuburbService.getSuburbList(toUpdate);
         System.out.println(data.getPostcode());
         System.out.println(toUpdate.getPostcode());
         return new PostcodeDTO(toUpdate, suburbs);

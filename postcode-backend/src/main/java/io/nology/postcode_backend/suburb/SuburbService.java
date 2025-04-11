@@ -33,9 +33,10 @@ public class SuburbService {
     public List<Suburb> getByIds(Set<Long> suburbIds) throws NotFoundException {
         if (suburbIds == null) {
             // System.out.println("suburb ids null");
-            List<Suburb> list = new ArrayList<>();
-            list.add(null);
-            return list;
+            // List<Suburb> list = new ArrayList<>();
+            // list.add(null);
+            // return list;
+            return null;
         }
         List<Suburb> suburbs = this.repo.findAllById(suburbIds);
         if (suburbs.size() != suburbIds.size()) {

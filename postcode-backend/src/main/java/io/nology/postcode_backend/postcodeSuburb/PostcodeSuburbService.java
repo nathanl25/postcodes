@@ -24,9 +24,13 @@ public class PostcodeSuburbService {
     }
 
     public void setSuburbList(Postcode postcode, List<Suburb> suburbs) {
-        clearSuburbList(postcode);
         if (suburbs == null) {
-            System.out.println("No suburb");
+            // System.out.println("No suburb");
+            // this.repo.saveAndFlush(new PostcodeSuburb(postcode, null));
+            return;
+        }
+        clearSuburbList(postcode);
+        if (suburbs.isEmpty()) {
             this.repo.saveAndFlush(new PostcodeSuburb(postcode, null));
             return;
         }
@@ -36,6 +40,12 @@ public class PostcodeSuburbService {
         }
         this.repo.saveAllAndFlush(postcodeSuburbs);
         return;
+    }
+
+    public List<Suburb> getSuburbList(Postcode postcode) {
+        List<PostcodeSuburb> rawList = this.repo.findByPostcode(postcode);
+        return rawList.stream().map(p -> p.getSuburb()).toList();
+        // return new ArrayList<>();
     }
 
     public void clearSuburbList(Postcode postcode) {

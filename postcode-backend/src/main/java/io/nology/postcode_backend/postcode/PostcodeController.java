@@ -65,9 +65,12 @@ public class PostcodeController {
 
     @PostMapping("{postcode}")
     public ResponseEntity<PostcodeDTO> updatePostcode(@PathVariable String postcode,
-            @RequestBody @Valid UpdatePostcodeDTO data) throws NotFoundException {
+            @RequestBody @Valid UpdatePostcodeDTO data) throws NotFoundException, PreExistingException {
         Postcode toUpdate = this.postcodeService.getByPostcode(postcode)
                 .orElseThrow((() -> new NotFoundException("The specified postcode does not exist")));
+        if (data.hasPostcode() && this.postcodeService.getByPostcode(data.getPostcode()).isPresent()) {
+            throw new PreExistingException("The specified postcode currently exists, cannot update postcode number");
+        }
         PostcodeDTO updatedPostcode = this.postcodeService.updatePostcode(toUpdate, data);
         return new ResponseEntity<>(updatedPostcode, HttpStatus.OK);
     }
