@@ -2,8 +2,6 @@ package io.nology.postcode_backend.postcode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 import io.nology.postcode_backend.suburb.Suburb;
 

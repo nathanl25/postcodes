@@ -56,11 +56,17 @@ public class PostcodeService {
         return this.repo.findOneByPostcode(postcode);
     }
 
-    public List<Postcode> getAll() {
-        return this.repo.findAll();
+    public PostcodeDTO getPostcodeData(Postcode postcode) {
+        return this.postcodeSuburbService.getOnePostcode(postcode);
     }
+    // public List<Postcode> getAll() {
+    // return this.repo.findAll();
+    // }
 
     public List<Postcode> getByPostcodes(Set<String> postcodes) throws NotFoundException {
+        if (postcodes == null) {
+            return null;
+        }
         List<Postcode> postcodeList = this.repo.findByPostcodeIn(postcodes);
         if (postcodeList.size() != postcodes.size()) {
             throw new NotFoundException("Matching postcodes not found");
@@ -68,7 +74,7 @@ public class PostcodeService {
         return postcodeList;
     }
 
-    public List<PostcodeDTO> getAllRaw() {
+    public List<PostcodeDTO> getAll() {
         return this.postcodeSuburbService.getAllPostcodes();
     }
 

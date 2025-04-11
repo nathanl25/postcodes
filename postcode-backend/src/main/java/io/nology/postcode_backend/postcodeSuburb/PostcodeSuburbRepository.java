@@ -11,7 +11,21 @@ import io.nology.postcode_backend.suburb.Suburb;
 public interface PostcodeSuburbRepository extends JpaRepository<PostcodeSuburb, Long> {
     List<PostcodeSuburb> findAllByOrderByPostcodePostcode();
 
+    List<PostcodeSuburb> findByPostcodeNotNullOrderByPostcodePostcode();
+
+    List<PostcodeSuburb> findByPostcodeNotNullOrderByPostcodePostcodeAscSuburbNameAsc();
+
+    List<PostcodeSuburb> findBySuburbNotNullOrderBySuburbName();
+
+    List<PostcodeSuburb> findBySuburbNotNullOrderBySuburbNameAscPostcodePostcodeAsc();
+
+    List<PostcodeSuburb> findAllByOrderBySuburbName();
+
+    List<PostcodeSuburb> findByPostcodeOrderBySuburbName(Postcode postcode);
+
     List<PostcodeSuburb> findByPostcode(Postcode postcode);
+
+    List<PostcodeSuburb> findBySuburb(Suburb suburb);
 
     void deleteByPostcode(Postcode postcode);
 

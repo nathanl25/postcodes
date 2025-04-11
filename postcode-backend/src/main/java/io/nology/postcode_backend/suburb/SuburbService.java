@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +23,14 @@ public class SuburbService {
     private SuburbRepository repo;
     private PostcodeService postcodeService;
     private PostcodeSuburbService postcodeSuburbService;
+    private ModelMapper mapper;
 
     SuburbService(SuburbRepository repo, @Lazy PostcodeService postcodeService,
-            @Lazy PostcodeSuburbService postcodeSuburbService) {
+            @Lazy PostcodeSuburbService postcodeSuburbService, ModelMapper mapper) {
         this.repo = repo;
         this.postcodeService = postcodeService;
         this.postcodeSuburbService = postcodeSuburbService;
+        this.mapper = mapper;
     }
 
     public List<Suburb> getByIds(Set<Long> suburbIds) throws NotFoundException {
@@ -45,18 +48,41 @@ public class SuburbService {
         return suburbs;
     }
 
+    public List<SuburbDTO> getAll() {
+        return this.postcodeSuburbService.getAllSuburbs();
+    }
+
     Optional<Suburb> getByName(String name) {
         return this.repo.findOneByName(name);
     }
 
-    public Suburb createSuburb(CreateSuburbDTO data) throws NotFoundException {
-        Suburb newSuburb = new Suburb(data.getName());
-        if (data.hasPostcodes()) {
-            List<Postcode> postcodes = this.postcodeService.getByPostcodes(data.getPostcodes());
-            return newSuburb;
-        }
-        this.repo.saveAndFlush(newSuburb);
-        return newSuburb;
+    Optional<Suburb> getById(Long id) {
+        return this.repo.findById(id);
     }
 
+    public void deleteSuburb(Suburb toDelete) {
+        this.postcodeSuburbService.clearPostcodeList(toDelete);
+        this.repo.delete(toDelete);
+    }
+
+    public SuburbDTO createSuburb(CreateSuburbDTO data) throws NotFoundException {
+        Suburb newSuburb = new Suburb(data.getName());
+        // if (data.hasPostcodes()) {
+        List<Postcode> postcodes = this.postcodeService.getByPostcodes(data.getPostcodes());
+        this.repo.saveAndFlush(newSuburb);
+        this.postcodeSuburbService.setPostcodeList(newSuburb, postcodes);
+        // return newSuburb;
+        // }
+        // this.repo.saveAndFlush(newSuburb);
+        return new SuburbDTO(newSuburb, postcodes);
+    }
+
+    public SuburbDTO updateSuburb(Suburb toUpdate, UpdateSuburbDTO data) throws NotFoundException {
+        List<Postcode> postcodes = this.postcodeService.getByPostcodes(data.getPostcodes());
+        this.postcodeSuburbService.setPostcodeList(toUpdate, postcodes);
+        mapper.map(data, toUpdate);
+        this.repo.saveAndFlush(toUpdate);
+        postcodes = postcodes != null ? postcodes : this.postcodeSuburbService.getPostcodeList(toUpdate);
+        return new SuburbDTO(toUpdate, postcodes);
+    }
 }
