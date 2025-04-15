@@ -31,4 +31,8 @@ public class UpdatePostcodeDTO {
     public boolean hasSuburbIds() {
         return suburbIds != null;
     }
+
+    public boolean hasPostcode() {
+        return postcode != null;
+    }
 }

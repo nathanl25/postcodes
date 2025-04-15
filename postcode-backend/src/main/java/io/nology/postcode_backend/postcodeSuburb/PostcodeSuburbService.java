@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import io.nology.postcode_backend.postcode.Postcode;
 import io.nology.postcode_backend.postcode.PostcodeDTO;
 import io.nology.postcode_backend.suburb.Suburb;
+import io.nology.postcode_backend.suburb.SuburbDTO;
 
 @Service
 public class PostcodeSuburbService {
@@ -24,9 +26,11 @@ public class PostcodeSuburbService {
     }
 
     public void setSuburbList(Postcode postcode, List<Suburb> suburbs) {
-        clearSuburbList(postcode);
         if (suburbs == null) {
-            System.out.println("No suburb");
+            return;
+        }
+        clearSuburbList(postcode);
+        if (suburbs.isEmpty()) {
             this.repo.saveAndFlush(new PostcodeSuburb(postcode, null));
             return;
         }
@@ -38,6 +42,17 @@ public class PostcodeSuburbService {
         return;
     }
 
+    public List<Suburb> getSuburbList(Postcode postcode) {
+        List<PostcodeSuburb> rawList = this.repo.findByPostcode(postcode);
+        return rawList.stream().map(p -> p.getSuburb()).toList();
+        // return new ArrayList<>();
+    }
+
+    public List<Postcode> getPostcodeList(Suburb suburb) {
+        List<PostcodeSuburb> rawList = this.repo.findBySuburb(suburb);
+        return rawList.stream().map(s -> s.getPostcode()).toList();
+    }
+
     public void clearSuburbList(Postcode postcode) {
         // this.repo.deleteByPostcode(postcode);
         List<PostcodeSuburb> toDelete = this.repo.findByPostcode(postcode);
@@ -46,10 +61,20 @@ public class PostcodeSuburbService {
     }
 
     public void clearPostcodeList(Suburb suburb) {
-        this.repo.deleteBySuburb(suburb);
+        // this.repo.deleteBySuburb(suburb);
+        List<PostcodeSuburb> toDelete = this.repo.findBySuburb(suburb);
+        this.repo.deleteAll(toDelete);
     }
 
     public void setPostcodeList(Suburb suburb, List<Postcode> postcodes) {
+        if (postcodes == null) {
+            return;
+        }
+        clearPostcodeList(suburb);
+        if (postcodes.isEmpty()) {
+            this.repo.saveAndFlush(new PostcodeSuburb(null, suburb));
+            return;
+        }
         List<PostcodeSuburb> suburbPostcodes = new ArrayList<>();
         for (Postcode postcode : postcodes) {
             suburbPostcodes.add(new PostcodeSuburb(postcode, suburb));
@@ -58,19 +83,45 @@ public class PostcodeSuburbService {
         return;
     }
 
+    public List<SuburbDTO> getAllSuburbs() {
+        Map<Suburb, List<Postcode>> suburbList = new LinkedHashMap<>();
+        // List<PostcodeSuburb> rawList = this.repo.findAllByOrderBySuburbName();
+        List<PostcodeSuburb> rawList = this.repo.findBySuburbNotNullOrderBySuburbNameAscPostcodePostcodeAsc();
+        for (PostcodeSuburb p : rawList) {
+            // if (p == null) {
+            // continue;
+            // }
+            suburbList.computeIfAbsent(p.getSuburb(), k -> new ArrayList<>())
+                    .add(p.getPostcode());
+        }
+        return suburbList.entrySet().stream()
+                .map(p -> new SuburbDTO(p.getKey(), p.getValue()))
+                .toList();
+    }
+
     public List<PostcodeDTO> getAllPostcodes() {
         Map<Postcode, List<Suburb>> postcodeList = new LinkedHashMap<Postcode, List<Suburb>>();
-        List<PostcodeSuburb> rawList = this.repo.findAllByOrderByPostcodePostcode();
+        // List<PostcodeSuburb> rawList = this.repo.findAllByOrderByPostcodePostcode();
+        List<PostcodeSuburb> rawList = this.repo.findByPostcodeNotNullOrderByPostcodePostcodeAscSuburbNameAsc();
         for (PostcodeSuburb p : rawList) {
-            System.out.println(p.getPostcode().getPostcode());
+            // if (p == null) {
+            // continue;
+            // }
+            // System.out.println(p.getPostcode().getPostcode());
             postcodeList.computeIfAbsent(p.getPostcode(), k -> new ArrayList<>())
                     .add(p.getSuburb());
         }
         return postcodeList.entrySet().stream()
-                .map(p -> {
-                    System.out.println(p.getKey().getPostcode());
-                    return new PostcodeDTO(p.getKey(), p.getValue());
-                })
+                .map(p -> new PostcodeDTO(p.getKey(), p.getValue()))
                 .toList();
+    }
+
+    public PostcodeDTO getOnePostcode(Postcode postcode) {
+        List<Suburb> suburbList = new ArrayList<>();
+        List<PostcodeSuburb> rawSuburbs = this.repo.findByPostcodeOrderBySuburbName(postcode);
+        for (PostcodeSuburb p : rawSuburbs) {
+            suburbList.add(p.getSuburb());
+        }
+        return new PostcodeDTO(postcode, suburbList);
     }
 }

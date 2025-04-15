@@ -1,5 +1,6 @@
 package io.nology.postcode_backend.postcode;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.validation.Valid;
@@ -24,6 +25,9 @@ public class CreatePostcodeDTO {
     private Set<@Valid @Min(value = 1, message = "Invalid suburb inputted") Long> suburbIds;
 
     public Set<Long> getSuburbIds() {
+        if (suburbIds == null) {
+            return new HashSet<>();
+        }
         return suburbIds;
     }
 

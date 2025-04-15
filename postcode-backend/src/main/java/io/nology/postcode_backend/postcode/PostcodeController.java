@@ -29,17 +29,27 @@ public class PostcodeController {
         this.postcodeService = postcodeService;
     }
 
+    // @GetMapping("raw")
+    // public ResponseEntity<List<Postcode>> getAllPostcodes() {
+    // List<Postcode> postcodes = this.postcodeService.getAll();
+    // return new ResponseEntity<>(postcodes, HttpStatus.OK);
+    // // return this.postcodeService.getAll();
+    // }
+
     @GetMapping()
-    public ResponseEntity<List<Postcode>> getAllPostcodes() {
-        List<Postcode> postcodes = this.postcodeService.getAll();
-        return new ResponseEntity<>(postcodes, HttpStatus.OK);
-        // return this.postcodeService.getAll();
+    public ResponseEntity<List<PostcodeDTO>> getAll() {
+        List<PostcodeDTO> rawData = this.postcodeService.getAll();
+        return new ResponseEntity<>(rawData, HttpStatus.OK);
     }
 
-    @GetMapping("raw")
-    public ResponseEntity<List<PostcodeDTO>> getAllRaw() {
-        List<PostcodeDTO> rawData = this.postcodeService.getAllRaw();
-        return new ResponseEntity<>(rawData, HttpStatus.OK);
+    @GetMapping("{postcodeNum}")
+    public ResponseEntity<PostcodeDTO> getPostcode(@PathVariable String postcodeNum) throws NotFoundException {
+
+        Postcode postcode = this.postcodeService.getByPostcode(postcodeNum)
+                .orElseThrow(() -> new NotFoundException("This postcode does not exist"));
+        PostcodeDTO postcodeData = this.postcodeService.getPostcodeData(postcode);
+        return new ResponseEntity<>(postcodeData, HttpStatus.OK);
+
     }
 
     @PostMapping()
@@ -54,20 +64,20 @@ public class PostcodeController {
 
     @DeleteMapping("{postcode}")
     public ResponseEntity<String> deletePostcode(@PathVariable String postcode) throws NotFoundException {
-        // if (this.postcodeService.getByPostcode(postcode).)
         Postcode toDelete = this.postcodeService.getByPostcode(postcode)
                 .orElseThrow((() -> new NotFoundException("The specified postcode does not exist")));
-        // this.postcodeService.deletePostcode(postcode);
-        System.out.println("Postcode exists");
         this.postcodeService.deletePostcode(toDelete);
         return new ResponseEntity<>("Postcode has been deleted", HttpStatus.OK);
     }
 
     @PostMapping("{postcode}")
     public ResponseEntity<PostcodeDTO> updatePostcode(@PathVariable String postcode,
-            @RequestBody @Valid UpdatePostcodeDTO data) throws NotFoundException {
+            @RequestBody @Valid UpdatePostcodeDTO data) throws NotFoundException, PreExistingException {
         Postcode toUpdate = this.postcodeService.getByPostcode(postcode)
                 .orElseThrow((() -> new NotFoundException("The specified postcode does not exist")));
+        if (data.hasPostcode() && this.postcodeService.getByPostcode(data.getPostcode()).isPresent()) {
+            throw new PreExistingException("The specified postcode currently exists, cannot update postcode number");
+        }
         PostcodeDTO updatedPostcode = this.postcodeService.updatePostcode(toUpdate, data);
         return new ResponseEntity<>(updatedPostcode, HttpStatus.OK);
     }

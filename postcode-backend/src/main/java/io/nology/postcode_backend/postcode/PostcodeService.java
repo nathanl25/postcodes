@@ -56,11 +56,17 @@ public class PostcodeService {
         return this.repo.findOneByPostcode(postcode);
     }
 
-    public List<Postcode> getAll() {
-        return this.repo.findAll();
+    public PostcodeDTO getPostcodeData(Postcode postcode) {
+        return this.postcodeSuburbService.getOnePostcode(postcode);
     }
+    // public List<Postcode> getAll() {
+    // return this.repo.findAll();
+    // }
 
     public List<Postcode> getByPostcodes(Set<String> postcodes) throws NotFoundException {
+        if (postcodes == null) {
+            return null;
+        }
         List<Postcode> postcodeList = this.repo.findByPostcodeIn(postcodes);
         if (postcodeList.size() != postcodes.size()) {
             throw new NotFoundException("Matching postcodes not found");
@@ -68,7 +74,7 @@ public class PostcodeService {
         return postcodeList;
     }
 
-    public List<PostcodeDTO> getAllRaw() {
+    public List<PostcodeDTO> getAll() {
         return this.postcodeSuburbService.getAllPostcodes();
     }
 
@@ -78,13 +84,17 @@ public class PostcodeService {
     }
 
     public PostcodeDTO updatePostcode(Postcode toUpdate, UpdatePostcodeDTO data) throws NotFoundException {
-        List<Suburb> suburbs = null;
-        if (data.hasSuburbIds()) {
-            suburbs = this.suburbService.getByIds(data.getSuburbIds());
-            this.postcodeSuburbService.setSuburbList(toUpdate, suburbs);
-        }
+        // List<Suburb> suburbs = null;
+        // if (data.hasSuburbIds()) {
+        List<Suburb> suburbs = this.suburbService.getByIds(data.getSuburbIds());
+        this.postcodeSuburbService.setSuburbList(toUpdate, suburbs);
+        // }
         mapper.map(data, toUpdate);
         this.repo.saveAndFlush(toUpdate);
+        // if (suburbs == null) {
+        // suburbs = this.postcodeSuburbService.getSuburbList(toUpdate);
+        // }
+        suburbs = suburbs != null ? suburbs : this.postcodeSuburbService.getSuburbList(toUpdate);
         System.out.println(data.getPostcode());
         System.out.println(toUpdate.getPostcode());
         return new PostcodeDTO(toUpdate, suburbs);
