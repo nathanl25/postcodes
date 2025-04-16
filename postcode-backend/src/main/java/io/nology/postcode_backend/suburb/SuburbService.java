@@ -52,11 +52,11 @@ public class SuburbService {
         return this.postcodeSuburbService.getAllSuburbs();
     }
 
-    Optional<Suburb> getByName(String name) {
+    public Optional<Suburb> getByName(String name) {
         return this.repo.findOneByName(name);
     }
 
-    Optional<Suburb> getById(Long id) {
+    public Optional<Suburb> getById(Long id) {
         return this.repo.findById(id);
     }
 
@@ -81,6 +81,8 @@ public class SuburbService {
         List<Postcode> postcodes = this.postcodeService.getByPostcodes(data.getPostcodes());
         this.postcodeSuburbService.setPostcodeList(toUpdate, postcodes);
         mapper.map(data, toUpdate);
+        System.out.println(data.getName());
+        System.out.println(toUpdate.getName());
         this.repo.saveAndFlush(toUpdate);
         postcodes = postcodes != null ? postcodes : this.postcodeSuburbService.getPostcodeList(toUpdate);
         return new SuburbDTO(toUpdate, postcodes);

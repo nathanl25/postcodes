@@ -1,0 +1,27 @@
+.container {
+  font-family: sans-serif;
+  // font-family: Montserrat;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin-top: 10%;
+  margin-left: auto;
+  margin-right: auto;
+  gap: 2em;
+}
+.field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.key {
+  font-size: 2rem;
+  font-weight: bold;
+}
+.value {
+  //   width: 30%;
+  font-size: 2rem;
+}
+.sub_value {
+  text-align: right;
+}

@@ -54,6 +54,7 @@ public class SuburbController {
     @PostMapping("{id}")
     public ResponseEntity<SuburbDTO> updateSuburb(@PathVariable Long id, @RequestBody @Valid UpdateSuburbDTO data)
             throws NotFoundException, PreExistingException {
+        System.out.println(data.getName());
         Suburb toUpdate = this.suburbService.getById(id)
                 .orElseThrow((() -> new NotFoundException("The specified suburb does not exist")));
         if (data.hasName() && this.suburbService.getByName(data.getName()).isPresent()) {

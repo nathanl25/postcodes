@@ -83,6 +83,16 @@ public class PostcodeService {
         this.repo.delete(toDelete);
     }
 
+    public boolean validPostcodeUpdate(Postcode toUpdate, UpdatePostcodeDTO data) {
+        if (toUpdate.getPostcode().equals(data.getPostcode())) {
+            return true;
+        }
+        if (data.hasPostcode() && this.getByPostcode(data.getPostcode()).isPresent()) {
+            return false;
+        }
+        return true;
+    }
+
     public PostcodeDTO updatePostcode(Postcode toUpdate, UpdatePostcodeDTO data) throws NotFoundException {
         // List<Suburb> suburbs = null;
         // if (data.hasSuburbIds()) {
