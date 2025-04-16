@@ -14,10 +14,7 @@ interface ListContainerProps
   isEditMode?: boolean;
 }
 
-export const ListContainer = ({
-  isEditMode = false,
-  ...rest
-}: ListContainerProps) => {
+export const ListContainer = ({ isEditMode = false }: ListContainerProps) => {
   const navigate = useNavigate();
   const createPostcodeNav = () => {
     navigate('/create', {
@@ -41,7 +38,9 @@ export const ListContainer = ({
       <section className={classes.list__container}>
         <div className={classes.button_row}>
           {isEditMode && (
-            <Button onClick={createPostcodeNav}>Create a New Postcode</Button>
+            <Button variant="add" onClick={createPostcodeNav}>
+              Create a New Postcode
+            </Button>
           )}
         </div>
         {postcodes.map((postcode) => (
@@ -58,7 +57,9 @@ export const ListContainer = ({
     <section className={classes.list__container}>
       <div className={classes.button_row}>
         {isEditMode && (
-          <Button onClick={createSuburbNav}>Create a New Suburb</Button>
+          <Button variant="add" onClick={createSuburbNav}>
+            Create a New Suburb
+          </Button>
         )}
       </div>
       {suburbs.map((suburb) => (

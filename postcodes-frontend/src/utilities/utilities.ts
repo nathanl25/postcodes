@@ -67,10 +67,7 @@ export const getSuburbOptions = (suburbs: PostcodeSuburb[]) => {
   });
 };
 
-export const createPostcodeDto = (
-  formData: PostcodeFormData
-  //   currData?: Postcode
-) => {
+export const createPostcodeDto = (formData: PostcodeFormData) => {
   const { suburbs } = formData;
   let suburbIds;
   if (suburbs == null) {
@@ -84,7 +81,6 @@ export const createPostcodeDto = (
     postcode: formData.postcode,
     suburbIds: suburbIds,
   } as PostcodeDto;
-  // const suburbIds = suburbs.map((suburb) => suburb?.id)
 };
 
 export const createSuburbDto = (formData: SuburbFormData) => {

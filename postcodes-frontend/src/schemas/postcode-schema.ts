@@ -7,11 +7,6 @@ export const postcodeSchema = z.object({
   postcode: z.string().regex(postcodePattern, {
     message: postcodeMsg,
   }),
-  //   suburbs:  z.object({
-  //             label: z.string(),
-  //             value: z.string(),
-  //             id: z.number(),
-  //           })
   suburbs: z
     .array(
       z

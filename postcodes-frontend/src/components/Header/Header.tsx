@@ -7,7 +7,6 @@ const Header = () => {
   const { heading } = useContext(HeaderContext);
   let link = '';
   let backVisible = true;
-  //   let content;
   switch (heading) {
     case 'View Postcodes':
     case 'View Suburbs':

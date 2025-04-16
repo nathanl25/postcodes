@@ -1,4 +1,4 @@
-// import classes from './LoginPage.module.scss';
+import classes from './LoginPage.module.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,9 +7,8 @@ import { getToken } from '../../services/admin-services';
 import { LoginContext } from '../../context/LoginContextProvider';
 import { useNavigate } from 'react-router';
 import { HeaderContext } from '../../context/HeaderContextProvider';
-// import {}
+import Button from '../../components/Button/Button';
 const LoginPage = () => {
-  // const {register} = useForm();
   const { setHeading } = useContext(HeaderContext);
   useEffect(() => {
     setHeading('Login');
@@ -29,8 +28,6 @@ const LoginPage = () => {
     setErrorMessage('');
     getToken(data)
       .then((res) => {
-        console.log(res);
-        console.log('success');
         setJwt(res);
         setIsLoggedIn(true);
         navigate('/admin');
@@ -41,23 +38,45 @@ const LoginPage = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(submitWrapper)}>
-      <div>
-        {errors?.username && <small>{errors?.username?.message}</small>}
+    <form className={classes.container} onSubmit={handleSubmit(submitWrapper)}>
+      <div className={classes.field}>
+        <div className={classes.error_row}>
+          {errors?.username && (
+            <small className={classes.error_message}>
+              {errors?.username?.message}
+            </small>
+          )}
+        </div>
+        <div className={classes.input_row}>
+          <label htmlFor="usernameInput" className={classes.label}>
+            Username
+          </label>
+          <input type="text" id="usernameInput" {...register('username')} />
+        </div>
       </div>
-      <div>
-        <label htmlFor="usernameInput">Username</label>
-        <input type="text" id="usernameInput" {...register('username')} />
+      <div className={classes.field}>
+        <div className={classes.error_row}>
+          {errors?.password && (
+            <small className={classes.error_message}>
+              {errors?.password?.message}
+            </small>
+          )}
+        </div>
+        <div className={classes.input_row}>
+          <label htmlFor="passwordInput" className={classes.label}>
+            Password
+          </label>
+          <input type="password" id="passwordInput" {...register('password')} />
+        </div>
       </div>
-      <div>
-        {errors?.password && <small>{errors?.password?.message}</small>}
+      <div className={classes.submit}>
+        <Button>Login</Button>
+        <div className={classes.error_row}>
+          {errorMessage && (
+            <small className={classes.error_message}>{errorMessage}</small>
+          )}
+        </div>
       </div>
-      <div>
-        <label htmlFor="passwordInput">Password</label>
-        <input type="password" id="passwordInput" {...register('password')} />
-      </div>
-      <div>{errorMessage && <small>{errorMessage}</small>}</div>
-      <button>Submit</button>
     </form>
   );
 };

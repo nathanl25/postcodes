@@ -46,7 +46,11 @@ const SuburbCard = ({ data, isEditMode = false }: SuburbCardProps) => {
       <div onClick={expand} className={classes.link_container}>
         <p className={classes.title}>{data.suburbName}</p>
       </div>
-      {isEditMode && <Button onClick={removeSuburb}>Delete</Button>}
+      {isEditMode && (
+        <Button variant="delete" onClick={removeSuburb}>
+          Delete
+        </Button>
+      )}
     </div>
   );
 };

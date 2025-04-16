@@ -19,6 +19,7 @@ import { createPostcode, updatePostcode } from '../../services/admin-services';
 import { getAllPostcodes, getAllSuburbs } from '../../services/public-services';
 import { useNavigate } from 'react-router';
 import { HeaderContext } from '../../context/HeaderContextProvider';
+import classes from './PostcodeForm.module.scss';
 
 interface PostcodeFormProps {
   currData?: Postcode;
@@ -26,8 +27,6 @@ interface PostcodeFormProps {
 }
 
 const PostcodeForm = ({ currData, isEditMode = false }: PostcodeFormProps) => {
-  // const {}
-  // const { setDisplayPostcode } = useContext(PostcodeContext);
   const { setHeading } = useContext(HeaderContext);
   useEffect(() => {
     setHeading(isEditMode ? 'Edit Postcode' : 'Create Postcode');
@@ -42,7 +41,6 @@ const PostcodeForm = ({ currData, isEditMode = false }: PostcodeFormProps) => {
   const {
     handleSubmit,
     register,
-    // getValues,
     control,
     formState: { errors },
   } = useForm<PostcodeFormData>({
@@ -74,17 +72,24 @@ const PostcodeForm = ({ currData, isEditMode = false }: PostcodeFormProps) => {
       .catch((e: string) => {
         setErrorMessage(e);
       });
-    console.log(dto);
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit(submitWrapper)}>
-        <div>
-          <div>{errors?.postcode && <p>{errors?.postcode?.message}</p>}</div>
-          <div>
-            <label htmlFor="postcodeInput">Postcode:</label>
+      <form
+        className={classes.container}
+        onSubmit={handleSubmit(submitWrapper)}
+      >
+        <div className={classes.field}>
+          <div className={classes.error_row}>
+            {errors?.postcode && <p>{errors?.postcode?.message}</p>}
+          </div>
+          <div className={classes.input_row}>
+            <label htmlFor="postcodeInput" className={classes.label}>
+              Postcode:
+            </label>
             <input
+              className={classes.input}
               type="text"
               id="postcodeInput"
               defaultValue={currData && currData.postcode}
@@ -92,10 +97,15 @@ const PostcodeForm = ({ currData, isEditMode = false }: PostcodeFormProps) => {
             />
           </div>
         </div>
-        <div>
-          <div>{errors?.suburbs && <p>{errors?.suburbs?.message}</p>}</div>
-          <div>
-            <label htmlFor="suburbInput">Suburbs:</label>
+
+        <div className={classes.field}>
+          <div className={classes.error_row}>
+            {errors?.suburbs && <p>{errors?.suburbs?.message}</p>}
+          </div>
+          <div className={classes.input_row}>
+            <label htmlFor="suburbInput" className={classes.label}>
+              Suburbs:
+            </label>
             <Controller
               control={control}
               name="suburbs"
@@ -104,18 +114,16 @@ const PostcodeForm = ({ currData, isEditMode = false }: PostcodeFormProps) => {
                   {...field}
                   isMulti
                   options={suburbOptions}
-                  //   defaultV
                   defaultValue={currSuburbs}
-                  // className={classes.input}
+                  className={classes.input}
                 />
               )}
             />
           </div>
         </div>
-        <div>
+        <div className={classes.submit}>
           <Button>Submit</Button>
-          <p>{errorMessage}</p>
-          {/* <div></div> */}
+          <p className={classes.error_row}>{errorMessage}</p>
         </div>
       </form>
     </>

@@ -1,7 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useEffect, useState } from 'react';
 import { Postcode, Suburb } from '../types/postcode';
-// import { getAllPostcodes } from '../services/public-services';
 import { getAllPostcodes, getAllSuburbs } from '../services/public-services';
 
 interface PostcodeContextValues {
@@ -11,8 +10,6 @@ interface PostcodeContextValues {
   setSuburbs: (data: Suburb[]) => void;
   displayPostcode: boolean;
   setDisplayPostcode: (val: boolean) => void;
-  // addPostcode: (data: unknown) => Promise<unknown>;
-  // updatePostcode: (data: unknown) => Promise<unknown>;
 }
 
 export const PostcodeContext = createContext<PostcodeContextValues>({

@@ -1,7 +1,6 @@
 package io.nology.postcode_backend.suburb;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import jakarta.validation.Valid;

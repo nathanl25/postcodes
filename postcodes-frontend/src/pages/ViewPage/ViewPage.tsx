@@ -21,7 +21,6 @@ const ViewPage = () => {
 
   if (state.variant === DataVariant.Postcode) {
     const suburbs = state.data.suburbs as PostcodeSuburb[];
-    // const suburbList = suburbs.map((suburb) => suburb.name);
     return (
       <div className={classes.container}>
         <div className={classes.field}>
@@ -36,7 +35,9 @@ const ViewPage = () => {
           <h2 className={classes.key}>Suburbs:</h2>
           <ul className={classes.value}>
             {suburbs.map((burb) => (
-              <li key={burb.suburbId}>{burb.name}</li>
+              <li className={classes.sub_value} key={burb.suburbId}>
+                {burb.name}
+              </li>
             ))}
           </ul>
         </div>
@@ -63,7 +64,6 @@ const ViewPage = () => {
             </li>
           ))}
         </ul>
-        {/* <p className={classes.value}>{JSON.stringify(state.data.suburbs)}</p> */}
       </div>
     </div>
   );

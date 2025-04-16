@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
+  margin-top: 1em;
+  margin-left: auto;
+  margin-right: auto;
+  gap: 2em;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+}
+.input_row {
+  font-size: 2em;
+  display: flex;
+  gap: 2em;
+}
+.error_row {
+  font-size: 1.5em;
+  min-height: 3em;
+  color: red;
+  small {
+    font-style: italic;
+    margin: 0;
+  }
+}
+.submit {
+  padding-top: 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+.error_message {
+  color: red;
+}
+.label {
+  flex: 0 1 200px;
+  font-weight: bold;
+}
+
+.input {
+  flex: 1 1 auto;
+}

@@ -17,11 +17,7 @@ interface PostcodeCardProps
   isEditMode?: boolean;
 }
 
-const PostcodeCard = ({
-  data,
-  isEditMode = false,
-  ...rest
-}: PostcodeCardProps) => {
+const PostcodeCard = ({ data, isEditMode = false }: PostcodeCardProps) => {
   const { jwt } = useContext(LoginContext);
   const { setPostcodes, setSuburbs } = useContext(PostcodeContext);
   const navigate = useNavigate();
@@ -50,7 +46,11 @@ const PostcodeCard = ({
       <div onClick={expand} className={classes.link_container}>
         <p className={classes.title}>{data.postcode}</p>
       </div>
-      {isEditMode && <Button onClick={removePostcode}>Delete</Button>}
+      {isEditMode && (
+        <Button variant="delete" onClick={removePostcode}>
+          Delete
+        </Button>
+      )}
     </div>
   );
 };

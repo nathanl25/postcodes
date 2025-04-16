@@ -105,6 +105,9 @@ export const createSuburb = async (dto: SuburbDto, jwt: string) => {
     })
     .catch((error) => {
       if (error.response) {
+        if (error.response.data.name) {
+          return Promise.reject(error.response.data.name as string);
+        }
         return Promise.reject(error.response.data as string);
       }
       return Promise.reject(error.message);
@@ -117,7 +120,6 @@ export const updateSuburb = async (
   jwt: string,
   suburbId: number
 ) => {
-  console.log(dto);
   const res = await axios
     .post<Suburb>(ADMIN_URL + 'suburb/' + suburbId, dto, {
       headers: {
@@ -129,11 +131,13 @@ export const updateSuburb = async (
     })
     .catch((error) => {
       if (error.response) {
+        if (error.response.data.name) {
+          return Promise.reject(error.response.data.name as string);
+        }
         return Promise.reject(error.response.data as string);
       }
       return Promise.reject(error.message);
     });
-  console.log(res);
   return res;
 };
 

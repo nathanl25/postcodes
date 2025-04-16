@@ -16,6 +16,7 @@ import { getAllPostcodes, getAllSuburbs } from '../../services/public-services';
 import Select from 'react-select';
 import Button from '../Button/Button';
 import { createSuburb, updateSuburb } from '../../services/admin-services';
+import classes from './SuburbForm.module.scss';
 
 interface SuburbFormProps {
   currData?: Suburb;
@@ -49,7 +50,6 @@ const SuburbForm = ({ currData, isEditMode = false }: SuburbFormProps) => {
     setErrorMessage('');
     const dto = createSuburbDto(data);
     if (isEditMode && currData) {
-      console.log(dto);
       updateSuburb(dto, jwt, currData.suburbId)
         .then(() => getAllPostcodes())
         .then((res) => setPostcodes(res))
@@ -57,7 +57,6 @@ const SuburbForm = ({ currData, isEditMode = false }: SuburbFormProps) => {
         .then((res) => setSuburbs(res))
         .then(() => navigate('/admin'))
         .catch((e: string) => {
-          console.log(e);
           setErrorMessage(e);
         });
       return;
@@ -74,23 +73,33 @@ const SuburbForm = ({ currData, isEditMode = false }: SuburbFormProps) => {
   };
   return (
     <>
-      <form onSubmit={handleSubmit(submitWrapper)}>
-        <div>{errors?.suburb && <p>{errors?.suburb?.message}</p>}</div>
-        <div>
-          <label htmlFor="suburbInput">Suburb:</label>
+      <form
+        className={classes.container}
+        onSubmit={handleSubmit(submitWrapper)}
+      >
+        <div className={classes.error_row}>
+          {errors?.suburb && <p>{errors?.suburb?.message}</p>}
+        </div>
+        <div className={classes.input_row}>
+          <label htmlFor="suburbInput" className={classes.label}>
+            Suburb:
+          </label>
           <input
+            className={classes.input}
             type="text"
             id="suburbInput"
             defaultValue={currData && currData.suburbName}
             {...register('suburb')}
           />
         </div>
-        <div>
-          <div>
+        <div className={classes.field}>
+          <div className={classes.error_row}>
             {errors?.postcodeList && <p>{errors?.postcodeList?.message}</p>}
           </div>
-          <div>
-            <label htmlFor="suburbInput">Postcodes:</label>
+          <div className={classes.input_row}>
+            <label htmlFor="suburbInput" className={classes.label}>
+              Postcodes:
+            </label>
             <Controller
               control={control}
               name="postcodeList"
@@ -99,18 +108,16 @@ const SuburbForm = ({ currData, isEditMode = false }: SuburbFormProps) => {
                   {...field}
                   isMulti
                   options={postcodeOptions}
-                  //   defaultV
                   defaultValue={currPostcodes}
-                  // className={classes.input}
+                  className={classes.input}
                 />
               )}
             />
           </div>
         </div>
-        <div>
+        <div className={classes.submit}>
           <Button>Submit</Button>
-          <p>{errorMessage}</p>
-          {/* <div></div> */}
+          <p className={classes.error_row}>{errorMessage}</p>
         </div>
       </form>
     </>

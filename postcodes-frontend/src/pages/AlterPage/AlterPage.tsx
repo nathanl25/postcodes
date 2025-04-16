@@ -12,7 +12,6 @@ const AlterPage = () => {
       navigate('/');
     }
   }, [navigate, state]);
-  console.log(state);
   if (state.variant === DataVariant.Postcode) {
     return (
       <>

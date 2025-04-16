@@ -1,5 +1,5 @@
 .header {
-  background-color: rgba(183, 180, 180, 0.544);
+  background-color: rgba(113, 123, 164, 0.544);
   height: 20vh;
   display: flex;
   flex-direction: column;
@@ -21,12 +21,14 @@
   color: blue;
 }
 .forward_link {
-  //   text-align: right;
-  //   margin-right: 15%;
   margin-left: 80%;
   font-size: 1.75rem;
   color: black;
   font-family: sans-serif;
   text-decoration: none;
-  //   justify-self: flex-end;
+  &:hover {
+    zoom: 102%;
+    box-shadow: rgba(128, 128, 128, 0.751) 0px 0px 20px 2px;
+    border-radius: 10px;
+  }
 }

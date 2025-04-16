@@ -11,8 +11,6 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
-// import com.nimbusds.jwt.JWTClaimsSet;
-
 @Service
 public class AuthService {
     private final JwtEncoder encoder;
@@ -35,8 +33,6 @@ public class AuthService {
                 .subject(auth.getName())
                 .claim("scope", scope)
                 .build();
-        System.out.println(scope);
-        System.out.println(JwtEncoderParameters.from(claims).getClaims().getClaimAsString("scope"));
         return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 }

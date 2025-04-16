@@ -1,6 +1,3 @@
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router';
 import HomePage from './pages/HomePage/HomePage';
 import AdminPage from './pages/AdminPage/AdminPage';
@@ -12,8 +9,7 @@ import AlterPage from './pages/AlterPage/AlterPage';
 import ViewPage from './pages/ViewPage/ViewPage';
 import HeaderContextProvider from './context/HeaderContextProvider';
 import Header from './components/Header/Header';
-// import { useContext } from 'react';
-// import RouteWrapper from './wrappers/RouteWrapper';
+
 function App() {
   return (
     <HeaderContextProvider>
@@ -23,7 +19,6 @@ function App() {
             <Header />
             <Routes>
               <Route path="/" element={<HomePage />} />
-              {/* <Route element={<AdminPage />} /> */}
               <Route
                 path="/admin"
                 element={
@@ -49,7 +44,6 @@ function App() {
                 }
               />
               <Route path="/view" element={<ViewPage />} />
-              {/* </Route> */}
               <Route path="/login" element={<LoginPage />} />
             </Routes>
           </BrowserRouter>

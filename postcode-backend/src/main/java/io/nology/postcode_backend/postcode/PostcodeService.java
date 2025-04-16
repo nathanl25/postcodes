@@ -6,11 +6,9 @@ import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import io.nology.postcode_backend.common.exceptions.NotFoundException;
-import io.nology.postcode_backend.postcodeSuburb.PostcodeSuburb;
 import io.nology.postcode_backend.postcodeSuburb.PostcodeSuburbService;
 import io.nology.postcode_backend.suburb.Suburb;
 import io.nology.postcode_backend.suburb.SuburbService;
@@ -32,36 +30,19 @@ public class PostcodeService {
 
     public PostcodeDTO createPostcode(CreatePostcodeDTO data) throws NotFoundException {
         Postcode newPostcode = new Postcode(data.getPostcode());
-        // if (data.hasSuburbIds()) {
         List<Suburb> suburbs = this.suburbService.getByIds(data.getSuburbIds());
         this.repo.saveAndFlush(newPostcode);
         this.postcodeSuburbService.setSuburbList(newPostcode, suburbs);
         return new PostcodeDTO(newPostcode, suburbs);
-        // }
-        // this.repo.saveAndFlush(newPostcode);
-        // return new PostcodeDTO(newPostcode);
-
-        // if (data.hasSuburbIds()) {
-        // List<Suburb> suburbs = this.suburbService.getByIds(data.getSuburbIds());
-        // this.repo.saveAndFlush(newPostcode);
-        // this.postcodeSuburbService.setSuburbList(newPostcode, suburbs);
-        // return new PostcodeDTO(newPostcode, suburbs);
-        // }
-        // this.repo.saveAndFlush(newPostcode);
-        // return new PostcodeDTO(newPostcode);
     }
 
     public Optional<Postcode> getByPostcode(String postcode) {
-        // return this.repo.findById(id);
         return this.repo.findOneByPostcode(postcode);
     }
 
     public PostcodeDTO getPostcodeData(Postcode postcode) {
         return this.postcodeSuburbService.getOnePostcode(postcode);
     }
-    // public List<Postcode> getAll() {
-    // return this.repo.findAll();
-    // }
 
     public List<Postcode> getByPostcodes(Set<String> postcodes) throws NotFoundException {
         if (postcodes == null) {
@@ -94,19 +75,11 @@ public class PostcodeService {
     }
 
     public PostcodeDTO updatePostcode(Postcode toUpdate, UpdatePostcodeDTO data) throws NotFoundException {
-        // List<Suburb> suburbs = null;
-        // if (data.hasSuburbIds()) {
         List<Suburb> suburbs = this.suburbService.getByIds(data.getSuburbIds());
         this.postcodeSuburbService.setSuburbList(toUpdate, suburbs);
-        // }
         mapper.map(data, toUpdate);
         this.repo.saveAndFlush(toUpdate);
-        // if (suburbs == null) {
-        // suburbs = this.postcodeSuburbService.getSuburbList(toUpdate);
-        // }
         suburbs = suburbs != null ? suburbs : this.postcodeSuburbService.getSuburbList(toUpdate);
-        System.out.println(data.getPostcode());
-        System.out.println(toUpdate.getPostcode());
         return new PostcodeDTO(toUpdate, suburbs);
     }
 }

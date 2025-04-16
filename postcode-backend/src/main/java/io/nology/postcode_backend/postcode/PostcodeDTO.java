@@ -37,14 +37,7 @@ public class PostcodeDTO {
             this.suburbs = suburbs.stream().map(s -> new SuburbData(s.getId(), s.getName())).toList();
         }
 
-        // this.suburbs = suburbs == null ? null : suburbs.stream().map(s ->
-        // s.getName()).toList();
     }
-
-    // public PostcodeDTO(Postcode postcode) {
-    // id = postcode.getId();
-    // this.postcode = postcode.getPostcode();
-    // }
 
     private Long postcodeId;
 
