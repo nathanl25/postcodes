@@ -39,4 +39,12 @@ public class PostcodeSuburb extends BaseEntity {
     public Suburb getSuburb() {
         return suburb;
     }
+
+    public void setPostcode(Postcode postcode) {
+        this.postcode = postcode;
+    }
+
+    public void setSuburb(Suburb suburb) {
+        this.suburb = suburb;
+    }
 }
