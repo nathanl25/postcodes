@@ -22,7 +22,7 @@ jobs:
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
-          path: ~/.m2
+          path: postcode-backend/.m2
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven
 
@@ -37,4 +37,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: todo-backend/target/surefire-reports/
+          path: postcode-backend/target/surefire-reports/
