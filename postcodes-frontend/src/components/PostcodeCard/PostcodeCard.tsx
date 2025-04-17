@@ -8,6 +8,7 @@ import { LoginContext } from '../../context/LoginContextProvider';
 import { deletePostcode } from '../../services/admin-services';
 import { getAllPostcodes, getAllSuburbs } from '../../services/public-services';
 import { PostcodeContext } from '../../context/PostcodeContextProvider';
+import { failureToast, successToast } from '../../services/toast';
 interface PostcodeCardProps
   extends React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLDivElement>,
@@ -37,8 +38,9 @@ const PostcodeCard = ({ data, isEditMode = false }: PostcodeCardProps) => {
       .then((res) => setPostcodes(res))
       .then(() => getAllSuburbs())
       .then((res) => setSuburbs(res))
+      .then(() => successToast('postcode'))
       .catch((e: string) => {
-        console.log(e);
+        failureToast(e);
       });
   };
   return (
