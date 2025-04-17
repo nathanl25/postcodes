@@ -8,6 +8,7 @@ import { LoginContext } from '../../context/LoginContextProvider';
 import { useNavigate } from 'react-router';
 import { HeaderContext } from '../../context/HeaderContextProvider';
 import Button from '../../components/Button/Button';
+import { loginToast } from '../../services/toast';
 const LoginPage = () => {
   const { setHeading } = useContext(HeaderContext);
   useEffect(() => {
@@ -30,6 +31,7 @@ const LoginPage = () => {
       .then((res) => {
         setJwt(res);
         setIsLoggedIn(true);
+        loginToast();
         navigate('/admin');
       })
       .catch((e) => {
