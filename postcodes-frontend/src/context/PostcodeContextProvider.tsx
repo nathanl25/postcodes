@@ -2,6 +2,7 @@
 import { createContext, useEffect, useState } from 'react';
 import { Postcode, Suburb } from '../types/postcode';
 import { getAllPostcodes, getAllSuburbs } from '../services/public-services';
+import { Bounce, ToastContainer } from 'react-toastify';
 
 interface PostcodeContextValues {
   postcodes: Postcode[];
@@ -47,6 +48,19 @@ const PostcodeContextProvider = ({
         setDisplayPostcode,
       }}
     >
+      <ToastContainer
+        position="bottom-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
       {children}
     </PostcodeContext.Provider>
   );

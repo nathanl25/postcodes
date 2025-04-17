@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import { LoginContext } from '../../context/LoginContextProvider';
 import { getAllPostcodes, getAllSuburbs } from '../../services/public-services';
 import { PostcodeContext } from '../../context/PostcodeContextProvider';
+import { failureToast, successToast } from '../../services/toast';
 interface SuburbCardProps
   extends React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLDivElement>,
@@ -37,8 +38,9 @@ const SuburbCard = ({ data, isEditMode = false }: SuburbCardProps) => {
       .then((res) => setPostcodes(res))
       .then(() => getAllSuburbs())
       .then((res) => setSuburbs(res))
+      .then(() => successToast('suburb'))
       .catch((e: string) => {
-        console.log(e);
+        failureToast(e);
       });
   };
   return (
