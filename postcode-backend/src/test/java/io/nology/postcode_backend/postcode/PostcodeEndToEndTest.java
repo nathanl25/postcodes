@@ -119,4 +119,15 @@ public class PostcodeEndToEndTest extends BaseEndToEndTest<PostcodeFixture> {
                 .statusCode(HttpStatus.OK.value());
 
     }
+
+    @Test
+    public void updatePostcodeCannotBeAccessedWithNoAuth() {
+        String postcodeString = getFixture().getPostcodeWithSuburb().getPostcode();
+        given()
+                .header("Authorization", "Bearer ")
+                .contentType(ContentType.JSON)
+                .post("/admin/postcode/" + postcodeString)
+                .then()
+                .statusCode(HttpStatus.UNAUTHORIZED.value());
+    }
 }
