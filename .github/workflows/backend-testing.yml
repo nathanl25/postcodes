@@ -22,8 +22,8 @@ jobs:
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
-          path: postcode-backend/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('postcode-backend/**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven
 
       - name: Build
