@@ -28,9 +28,11 @@ jobs:
 
       - name: Build
         run: mvn clean install
+        working-directory: ./postcode-backend
 
       - name: Run tests
         run: mvn test
+        working-directory: ./postcode-backend
 
       - name: Upload Test Results
         if: always()
