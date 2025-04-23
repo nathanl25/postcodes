@@ -5,8 +5,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import io.nology.postcode_backend.postcode.FilterPostcodeDTO;
 import io.nology.postcode_backend.postcode.Postcode;
 import io.nology.postcode_backend.postcode.PostcodeDTO;
 import io.nology.postcode_backend.suburb.Suburb;
@@ -110,5 +113,54 @@ public class PostcodeSuburbService {
             suburbList.add(p.getSuburb());
         }
         return new PostcodeDTO(postcode, suburbList);
+    }
+
+    public List<PostcodeDTO> queryPostcodes(FilterResultsDTO data) {
+        Sort currSort = Sort.by(data.getPostcodeSortDirection(), "postcode.postcode")
+                .and(Sort.by(data.getSuburbSortDirection(), "suburb.name"));
+        Map<Postcode, List<Suburb>> postcodeList = new LinkedHashMap<Postcode, List<Suburb>>();
+        Specification<PostcodeSuburb> spec = Specification.where(null);
+        if (data.getPostcode() != null) {
+            spec = spec.and(PostcodeSuburbSpec.hasPostcode(data.getPostcode()));
+        }
+        if (data.getName() != null) {
+            spec = spec.and(PostcodeSuburbSpec.hasSuburb(data.getName()));
+        }
+        List<PostcodeSuburb> rawList = this.repo.findAll(spec, currSort);
+        for (PostcodeSuburb p : rawList) {
+            if (p.getPostcode() == null) {
+                continue;
+            }
+            postcodeList.computeIfAbsent(p.getPostcode(), k -> new ArrayList<>())
+                    .add(p.getSuburb());
+        }
+        return postcodeList.entrySet().stream()
+                .map(p -> new PostcodeDTO(p.getKey(), p.getValue()))
+                .toList();
+
+    }
+
+    public List<SuburbDTO> querySuburbs(FilterResultsDTO data) {
+        Sort currSort = Sort.by(data.getSuburbSortDirection(), "suburb.name")
+                .and(Sort.by(data.getPostcodeSortDirection(), "postcode.postcode"));
+        Specification<PostcodeSuburb> spec = Specification.where(null);
+        if (data.getPostcode() != null) {
+            spec = spec.and(PostcodeSuburbSpec.hasPostcode(data.getPostcode()));
+        }
+        if (data.getName() != null) {
+            spec = spec.and(PostcodeSuburbSpec.hasSuburb(data.getName()));
+        }
+        List<PostcodeSuburb> rawList = this.repo.findAll(spec, currSort);
+        Map<Suburb, List<Postcode>> suburbList = new LinkedHashMap<>();
+        for (PostcodeSuburb p : rawList) {
+            if (p.getSuburb() == null) {
+                continue;
+            }
+            suburbList.computeIfAbsent(p.getSuburb(), k -> new ArrayList<>())
+                    .add(p.getPostcode());
+        }
+        return suburbList.entrySet().stream()
+                .map(p -> new SuburbDTO(p.getKey(), p.getValue()))
+                .toList();
     }
 }
