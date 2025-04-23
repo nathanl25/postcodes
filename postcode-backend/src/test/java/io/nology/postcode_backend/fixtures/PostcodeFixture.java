@@ -12,6 +12,7 @@ public class PostcodeFixture extends BaseFixture {
     private Postcode postcodeWithSuburb;
     private Postcode postcodeWithoutSuburb;
     private Suburb suburb;
+    private Suburb anotherSuburb;
     private PostcodeSuburb postcodeWithSuburbEntry;
     private PostcodeSuburb postcodeWithoutSuburbEntry;
 
@@ -20,6 +21,7 @@ public class PostcodeFixture extends BaseFixture {
         postcodeWithSuburb = createPostcode();
         postcodeWithoutSuburb = createPostcode();
         suburb = createSuburb();
+        anotherSuburb = createSuburb();
         postcodeWithSuburbEntry = createPostcodeSuburb(postcodeWithSuburb, suburb);
         postcodeWithoutSuburbEntry = createPostcodeSuburb(postcodeWithoutSuburb, null);
     }
@@ -34,6 +36,10 @@ public class PostcodeFixture extends BaseFixture {
 
     public Suburb getSuburb() {
         return suburb;
+    }
+
+    public Suburb getAnotherSuburb() {
+        return anotherSuburb;
     }
 
     public PostcodeSuburb getPostcodeWithSuburbEntry() {
@@ -54,6 +60,10 @@ public class PostcodeFixture extends BaseFixture {
 
     public void setSuburb(Suburb suburb) {
         this.suburb = suburb;
+    }
+
+    public void setAnotherSuburb(Suburb anotherSuburb) {
+        this.anotherSuburb = anotherSuburb;
     }
 
     public void setPostcodeWithSuburbEntry(PostcodeSuburb postcodeWithSuburbEntry) {

@@ -4,12 +4,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.nology.postcode_backend.common.exceptions.NotFoundException;
+import io.nology.postcode_backend.postcodeSuburb.FilterResultsDTO;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
@@ -38,4 +41,9 @@ public class PostcodeController {
 
     }
 
+    @GetMapping("/filter")
+    public ResponseEntity<List<PostcodeDTO>> queryPostcodes(@ModelAttribute @Valid FilterResultsDTO data) {
+        List<PostcodeDTO> response = this.postcodeService.findByCriteria(data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

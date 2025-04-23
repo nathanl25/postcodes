@@ -3,11 +3,13 @@ package io.nology.postcode_backend.postcodeSuburb;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.NativeQuery;
 import io.nology.postcode_backend.postcode.Postcode;
 import io.nology.postcode_backend.suburb.Suburb;
 
-public interface PostcodeSuburbRepository extends JpaRepository<PostcodeSuburb, Long> {
+public interface PostcodeSuburbRepository
+        extends JpaRepository<PostcodeSuburb, Long>, JpaSpecificationExecutor<PostcodeSuburb> {
     List<PostcodeSuburb> findAllByOrderByPostcodePostcode();
 
     List<PostcodeSuburb> findByPostcodeNotNullOrderByPostcodePostcode();
@@ -25,6 +27,8 @@ public interface PostcodeSuburbRepository extends JpaRepository<PostcodeSuburb, 
     List<PostcodeSuburb> findByPostcode(Postcode postcode);
 
     List<PostcodeSuburb> findBySuburb(Suburb suburb);
+
+    // List<PostcodeSuburb> find
 
     void deleteByPostcode(Postcode postcode);
 

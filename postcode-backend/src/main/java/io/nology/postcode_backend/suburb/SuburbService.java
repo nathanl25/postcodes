@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import io.nology.postcode_backend.common.exceptions.NotFoundException;
 import io.nology.postcode_backend.postcode.Postcode;
 import io.nology.postcode_backend.postcode.PostcodeService;
+import io.nology.postcode_backend.postcodeSuburb.FilterResultsDTO;
 import io.nology.postcode_backend.postcodeSuburb.PostcodeSuburbService;
+import jakarta.validation.Valid;
 
 @Service
 public class SuburbService {
@@ -72,5 +74,10 @@ public class SuburbService {
         this.repo.saveAndFlush(toUpdate);
         postcodes = postcodes != null ? postcodes : this.postcodeSuburbService.getPostcodeList(toUpdate);
         return new SuburbDTO(toUpdate, postcodes);
+    }
+
+    public List<SuburbDTO> findByCriteria(FilterResultsDTO data) {
+        List<SuburbDTO> filtered = this.postcodeSuburbService.querySuburbs(data);
+        return filtered;
     }
 }

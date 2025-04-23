@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import io.nology.postcode_backend.common.exceptions.NotFoundException;
+import io.nology.postcode_backend.postcodeSuburb.FilterResultsDTO;
 import io.nology.postcode_backend.postcodeSuburb.PostcodeSuburbService;
 import io.nology.postcode_backend.suburb.Suburb;
 import io.nology.postcode_backend.suburb.SuburbService;
@@ -81,5 +82,10 @@ public class PostcodeService {
         this.repo.saveAndFlush(toUpdate);
         suburbs = suburbs != null ? suburbs : this.postcodeSuburbService.getSuburbList(toUpdate);
         return new PostcodeDTO(toUpdate, suburbs);
+    }
+
+    public List<PostcodeDTO> findByCriteria(FilterResultsDTO data) {
+        List<PostcodeDTO> filtered = this.postcodeSuburbService.queryPostcodes(data);
+        return filtered;
     }
 }
