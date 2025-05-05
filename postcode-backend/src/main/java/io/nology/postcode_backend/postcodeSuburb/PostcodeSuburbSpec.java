@@ -23,4 +23,7 @@ public class PostcodeSuburbSpec {
         };
     }
 
+    // public static Specification<PostcodeSuburb> withPostcodeSorting(String
+    // orderBy)
+
 }

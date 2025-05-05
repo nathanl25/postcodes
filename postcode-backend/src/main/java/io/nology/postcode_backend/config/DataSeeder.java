@@ -1,13 +1,18 @@
 package io.nology.postcode_backend.config;
 
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 
 import io.nology.postcode_backend.postcode.Postcode;
@@ -33,11 +38,37 @@ public class DataSeeder implements CommandLineRunner {
         this.postcodeSuburbRepo = postcodeSuburbRepo;
     }
 
+    private static String capitaliseString(String s) {
+        String[] words = s.toLowerCase().split(" ");
+        StringJoiner sj = new StringJoiner(" ");
+        for (String word : words) {
+            sj.add(word.substring(0, 1).toUpperCase() + word.substring(1));
+        }
+        // Stream<String> st = Arrays.stream(s.toLowerCase().split(" "));
+        // st.map((word) -> {
+        // return word.substring(0, 0).toUpperCase() + word.substring(1);
+        // });
+        return sj.toString();
+    }
+
     @Override
     public void run(String... args) throws Exception {
         this.postcodeSuburbRepo.deleteAll();
         this.postcodeRepo.deleteAll();
         this.suburbRepo.deleteAll();
+        ObjectMapper mapper = new ObjectMapper();
+        // TypeReference<List<Postcode>> posTypeReference = new
+        // TypeReference<List<Postcode>>(){};
+        TypeReference<List<JsonNode>> jsonTypeReference = new TypeReference<List<JsonNode>>() {
+        };
+        InputStream jsonInput = getClass().getResourceAsStream("/json/postcodes.json");
+        List<JsonNode> jsonValues = mapper.readValue(jsonInput, jsonTypeReference);
+        for (JsonNode j : jsonValues) {
+            String postcode = j.get("postcode").asText();
+            String suburb = j.get("suburb").asText();
+            System.out.println(postcode);
+            System.out.println(capitaliseString(suburb));
+        }
 
         // Ensure at least 20 suburbs
         for (int i = 0; i <= 20; i++) {
