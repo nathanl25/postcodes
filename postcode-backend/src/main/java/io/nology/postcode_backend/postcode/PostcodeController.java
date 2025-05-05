@@ -25,11 +25,11 @@ public class PostcodeController {
         this.postcodeService = postcodeService;
     }
 
-    @GetMapping()
-    public ResponseEntity<List<PostcodeDTO>> getAll() {
-        List<PostcodeDTO> rawData = this.postcodeService.getAll();
-        return new ResponseEntity<>(rawData, HttpStatus.OK);
-    }
+    // @GetMapping()
+    // public ResponseEntity<List<PostcodeDTO>> getAll() {
+    // List<PostcodeDTO> rawData = this.postcodeService.getAll();
+    // return new ResponseEntity<>(rawData, HttpStatus.OK);
+    // }
 
     @GetMapping("{postcodeNum}")
     public ResponseEntity<PostcodeDTO> getPostcode(@PathVariable String postcodeNum) throws NotFoundException {
@@ -41,7 +41,7 @@ public class PostcodeController {
 
     }
 
-    @GetMapping("/filter")
+    @GetMapping()
     public ResponseEntity<List<PostcodeDTO>> queryPostcodes(@ModelAttribute @Valid FilterResultsDTO data) {
         List<PostcodeDTO> response = this.postcodeService.findByCriteria(data);
         return new ResponseEntity<>(response, HttpStatus.OK);

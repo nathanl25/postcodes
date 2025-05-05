@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern;
 
 public class FilterResultsDTO {
 
-    @Pattern(regexp = "^\\d{1,4}$", message = "Postcode must be at least a 1 digit number")
+    @Pattern(regexp = "^\\d{1,4}$", message = "Postcode must be a 1-4 digit number")
     private String postcode;
 
     @Pattern(regexp = "[a-zA-Z- ]{1,25}", message = "Suburb can only contain letters, spaces and hypens and must be at least 1 character")

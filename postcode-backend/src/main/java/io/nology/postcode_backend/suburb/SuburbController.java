@@ -23,13 +23,13 @@ public class SuburbController {
         this.suburbService = suburbService;
     }
 
-    @GetMapping()
-    public ResponseEntity<List<SuburbDTO>> getAll() {
-        List<SuburbDTO> rawData = this.suburbService.getAll();
-        return new ResponseEntity<>(rawData, HttpStatus.OK);
-    }
+    // @GetMapping()
+    // public ResponseEntity<List<SuburbDTO>> getAll() {
+    // List<SuburbDTO> rawData = this.suburbService.getAll();
+    // return new ResponseEntity<>(rawData, HttpStatus.OK);
+    // }
 
-    @GetMapping("/filter")
+    @GetMapping()
     public ResponseEntity<List<SuburbDTO>> queryPostcodes(@ModelAttribute @Valid FilterResultsDTO data) {
         List<SuburbDTO> response = this.suburbService.findByCriteria(data);
         return new ResponseEntity<>(response, HttpStatus.OK);
